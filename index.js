@@ -1,12 +1,16 @@
 const default_config = {
-  include_abscent_teacher: true,
   dev: true,
   table_amount: 2,
+  hide_null_teachers: true,
+  hide_gone: true,
+  hide_no_data: true,
 };
 const config = {
-  include_abscent_teacher: findBoolGetParameter("include_abscent_teacher") ?? default_config.include_abscent_teacher,
   dev: true,
   table_amount: findIntGetParameter("table_amount") ?? default_config.table_amount,
+  hide_null_teachers: findBoolGetParameter("hide_null_teachers") ?? default_config.hide_null_teachers,
+  hide_gone: findBoolGetParameter("hide_gone") ?? default_config.hide_gone,
+  hide_no_data: findBoolGetParameter("hide_no_data") ?? default_config.hide_no_data,
 };
 window.onload = () => loadTable();
 function loadTable() {
@@ -31,19 +35,18 @@ function loadTable() {
         if(line == "") return;
         var splited_line = line.split("|");
         const row = document.createElement('tr');
-        const e1 = document.createElement('td');
-        const e2 = document.createElement('td');
+        const nameColumn = document.createElement('td');
+        const roomColoumn = document.createElement('td');
         const room = splited_line[3];
         const teacher = splited_line[0];
+        const teacher_status = splited_line[7];
         const index = i%config.table_amount;
-        if(teacher.toLowerCase().startsWith('zn')) return;
-        if(room == "-" && !config.include_abscent_teacher) return;
-        console.log(room, "-", room == "-", !config.include_abscent_teacher, room == "-" && !config.include_abscent_teacher);
-        e1.textContent = teacher;
-        e2.textContent = room;
-        if(room == "-") e2.setAttribute("style", "background-color:#fbb;");
-        row.appendChild(e1);
-        row.appendChild(e2);
+        if(shouldBeIgnored(room, teacher, teacher_status)) return;
+        nameColumn.textContent = teacher;
+        roomColoumn.textContent = room;
+        if(room == "-") roomColoumn.setAttribute("style", "background-color:#fbb;");
+        row.appendChild(nameColumn);
+        row.appendChild(roomColoumn);
         console.log(tables, index);
         tables[index].appendChild(row);
         i += 1;
@@ -55,6 +58,13 @@ function loadTable() {
       }
     });
 };
+function shouldBeIgnored(room, teacher, teacher_status) {
+  if(teacher.toLowerCase().startsWith('zn')) return true; // intern structs
+  if(room == "" && config.hide_null_teachers) return true;
+  if(teacher_status == "Gone" && config.hide_gone) return true;
+  if(teacher_status == "NoData" && config.hide_no_data) return true;
+  return false;
+}
 function findGetParameter(parameterName) {
   var result = null,
   tmp = [];
@@ -70,6 +80,7 @@ function findGetParameter(parameterName) {
 function findBoolGetParameter(paramaterName) {
   var result = findGetParameter(paramaterName);
   if(result == null) return null;
+  if(result != 'false' && result != 'true') return null;
   return result == 'true';
 }
 function findIntGetParameter(paramaterName) {
