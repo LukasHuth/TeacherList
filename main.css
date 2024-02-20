@@ -1,0 +1,25 @@
+body {
+  background-color: #ddd;
+}
+table {
+  width: 40%;
+}
+td {
+  width: 50%;
+  padding: 10px 5px;
+  border: 1px solid black;
+  height: 30px;
+}
+#table-container {
+  display: flex;
+}
+#table-container table {
+  flex: 1;
+  margin-right: 10px;
+}
+#table0 {
+  left: 0;
+}
+#table1 {
+  right: 0;
+}
