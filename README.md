@@ -1,0 +1,54 @@
+# Teacher List
+
+## Overview
+
+This website provides semi real-time information about the current location of teachers.
+
+## Usage
+
+### Parameters
+
+You can customize the display of teacher information using the followingparameters in the URL:
+
+- **table_amount**: Specifies the amount of tables (rows) used for displaying teacher information next
+to each other. Default value is 2.
+- **hide_null_teachers**: Controls whether teachers who are registered at the school but do not
+have courses scheduled for the current year are displayed. Default value is true, meaning they
+are hidden.
+- **hide_gone**: Determines whether teachers who have finished their courses for the day are
+displayed. Default value is true, meaning they are hidden.
+- **hide_no_data**: Decides whether teachers who have no courses scheduled for the current day
+are displayed. Default value is true, meaning they are hidden.
+
+### Example usage
+
+To customize the display, simple append the desired parameters to the URL. For example:
+
+```
+https://example.com/teacher-availability?table_amount=3&hide_null_teachers=false
+```
+
+This URL will display teacher information in 3 rows, including teachers who do not have courses schedules for the current year.
+
+## Development
+
+### Used Technologies
+
+- HTML
+- CSS
+- JavaScript
+
+### Instalation
+
+Clone this repository with following command:
+```bash
+git clone git@github.com:LukasHuth/TeacherList.git <path to your webserver>
+```
+or:
+```bash
+cd <path to your webserver>
+git clone git@github.com:LukasHuth/TeacherList.git
+```
+
+## Contributers
+- [Lukas Huth](https://github.com/LukasHuth)
