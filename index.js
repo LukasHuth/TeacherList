@@ -75,12 +75,25 @@ function loadTable() {
     });
 };
 function shouldBeIgnored(room, teacher, teacher_status, start, end) {
+  console.log("start test");
   if(teacher.toLowerCase().startsWith('zn')) return true; // intern structs
   if(room == "" && config.hide_null_teachers) return true;
-  if(teacher_status == "Gone" && config.hide_gone) return true;
-  if(teacher_status == "NoData" && config.hide_no_data) return true;
-  if(getTime(start) > now(config.offset_to_next_course)) return true;
-  if(((getTime(start) > now()) || (getTime(end) < now())) && config.only_currently) return true;
+  if(teacher_status == "Gone" && config.hide_gone) {
+    console.log("gone")
+    return true;
+  }
+  if(teacher_status == "NoData" && config.hide_no_data) {
+    console.log("NoData");
+    return true;
+  }
+  if(start != "-" && (getTime(start) > now(config.offset_to_next_course))) {
+    console.log("time")
+    return true;
+  }
+  if(start != "-" && ((getTime(start) > now()) || (getTime(end) < now())) && config.only_currently) {
+    console.log("now")
+    return true;
+  }
   return false;
 }
 function getTime(timeStr) {
