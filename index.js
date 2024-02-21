@@ -1,3 +1,7 @@
+const sortTypes = {
+  ByName: 'ByName',
+  ByRoom: 'ByRoom',
+};
 const default_config = {
   dev: true,
   table_amount: 2,
@@ -7,6 +11,7 @@ const default_config = {
   only_currently: true,
   update_time: 15*60*1000,
   offset_to_next_course: 30*60*1000,
+  sort_type: sortTypes.ByName,
 };
 const config = {
   dev: findBoolGetParameter("dev") ?? default_config.dev,
@@ -17,6 +22,7 @@ const config = {
   only_currently: findBoolGetParameter("only_currently") ?? default_config.only_currently,
   update_time: findIntGetParameter("update_time") ?? default_config.update_time,
   offset_to_next_course: findIntGetParameter("offset_to_next_course") ?? default_config.offset_to_next_course,
+  sort_type: findEnumGetParameter("sort_type") ?? default_config.sort_type,
 };
 var new_update = new Date();
 window.onload = () => {
@@ -46,9 +52,20 @@ function loadTable() {
   }).then(data => {
       var t = "" + data;
       var i = 0;
-      t.split("\n").forEach(line => {
-        if(line == "") return;
-        var splited_line = line.split("|");
+      var sort_alg;
+      switch(config.sort_type) {
+        case sortTypes.ByName:
+          sort_alg = sortByName;
+          break;
+        case sortTypes.ByRoom:
+          sort_alg = sortByRoom;
+          break;
+        default:
+          sort_alg = sortByName;
+          break;
+      }
+      t.split("\n").filter(l => l != "").map(line => line.split("|")).sort(sort_alg).forEach(splited_line => {
+        if(splited_line == []) return;
         const row = document.createElement('tr');
         const nameColumn = document.createElement('td');
         const roomColoumn = document.createElement('td');
@@ -74,6 +91,13 @@ function loadTable() {
       }
     });
 };
+function sortByName(e1, e2) {
+  return e1[0].localeCompare(e2[0]);
+}
+function sortByRoom(e1, e2) {
+  console.log(e1, e2);
+  return e1[3].localeCompare(e2[3]);
+}
 function shouldBeIgnored(room, teacher, teacher_status, start, end) {
   console.log("start test");
   if(teacher.toLowerCase().startsWith('zn')) return true; // intern structs
@@ -125,4 +149,10 @@ function findIntGetParameter(paramaterName) {
   if(result == null) return null;
   if(isNaN(result)) return null;
   return Number(result);
+}
+function findEnumGetParameter(paramaterName) {
+  var result = findGetParameter(paramaterName);
+  if(result == null) return null;
+  if(!sortTypes.hasOwnProperty(result)) return null;
+  return result;
 }
