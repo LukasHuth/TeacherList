@@ -6,6 +6,7 @@ const default_config = {
   hide_no_data: true,
   only_currently: true,
   update_time: 15*60*1000,
+  offset_to_next_course: 30*60*1000,
 };
 const config = {
   dev: findBoolGetParameter("dev") ?? default_config.dev,
@@ -15,6 +16,7 @@ const config = {
   hide_no_data: findBoolGetParameter("hide_no_data") ?? default_config.hide_no_data,
   only_currently: findBoolGetParameter("only_currently") ?? default_config.only_currently,
   update_time: findIntGetParameter("update_time") ?? default_config.update_time,
+  offset_to_next_course: findIntGetParameter("offset_to_next_course") ?? default_config.offset_to_next_course,
 };
 var new_update = new Date();
 window.onload = () => {
@@ -62,7 +64,6 @@ function loadTable() {
         if(room == "-") roomColoumn.setAttribute("style", "background-color:#fbb;");
         row.appendChild(nameColumn);
         row.appendChild(roomColoumn);
-        console.log(tables, index);
         tables[index].appendChild(row);
         i += 1;
       });
@@ -78,8 +79,15 @@ function shouldBeIgnored(room, teacher, teacher_status, start, end) {
   if(room == "" && config.hide_null_teachers) return true;
   if(teacher_status == "Gone" && config.hide_gone) return true;
   if(teacher_status == "NoData" && config.hide_no_data) return true;
-  if(((new Date(start) > new Date()) || (new Date(end) < new Date())) && config.only_currently) return true;
+  if(getTime(start) > now(config.offset_to_next_course)) return true;
+  if(((getTime(start) > now()) || (getTime(end) < now())) && config.only_currently) return true;
   return false;
+}
+function getTime(timeStr) {
+  return new Date(timeStr) + (60 * 60 * 1000);
+}
+function now(offset) {
+  return new Date() + offset;
 }
 function findGetParameter(parameterName) {
   var result = null,
