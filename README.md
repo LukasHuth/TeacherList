@@ -19,6 +19,9 @@ are hidden.
 displayed. Default value is true, meaning they are hidden.
 - **hide_no_data**: Decides whether teachers who have no courses scheduled for the current day
 are displayed. Default value is true, meaning they are hidden.
+- **only_currently**: Determines whether teachers who currently have no course should be displayed
+or not. Default value is true, meaing they are hidden.
+- **update_time**: Sets the interval in which the data is updated. Default value is 900000 (15min)
 
 ### Example usage
 

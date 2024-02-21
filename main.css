@@ -3,12 +3,19 @@ body {
 }
 table {
   width: 40%;
+  padding-left: 9px;
+}
+table ~ table {
+  border-left: 3px solid black;
 }
 td {
   width: 50%;
   padding: 10px 5px;
-  border: 1px solid black;
+  /*border: 1px solid black;*/
   height: 30px;
+}
+table tr ~ tr td {
+  border-top: 1px solid black;
 }
 #table-container {
   display: flex;
