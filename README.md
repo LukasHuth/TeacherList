@@ -45,7 +45,7 @@ This URL will display teacher information in 3 rows, including teachers who do n
 - CSS
 - JavaScript
 
-### Instalation
+### Installation
 
 Clone this repository with following command:
 ```bash
