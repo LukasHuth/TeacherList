@@ -22,6 +22,8 @@ are displayed. Default value is true, meaning they are hidden.
 - **only_currently**: Determines whether teachers who currently have no course should be displayed
 or not. Default value is true, meaing they are hidden.
 - **update_time**: Sets the interval in which the data is updated. Default value is 900000 (15min)
+- **offset_to_next_course**: Defines the amount in ms that the beginning of the next course of
+an not teaching teacher can be away to still be displayed. Default is 1800000 (30min)
 
 ### Example usage
 
