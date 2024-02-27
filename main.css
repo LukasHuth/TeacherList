@@ -1,19 +1,6 @@
 body {
-  background-color: #ddd;
-}
-table {
-  width: 40%;
-  padding-left: 9px;
-}
-table ~ table {
-  border-left: 3px solid black;
-}
-td {
-  /* width: 50%; */
-  width: calc(100% / 3);
-  padding: 10px 5px;
-  /*border: 1px solid black;*/
-  height: 30px;
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/LudwigGeisslerSchule.jpg/1280px-LudwigGeisslerSchule.jpg");
+  background-size: 100%;
 }
 .e2 tr td {
   width: calc(100% / 2);
@@ -24,9 +11,6 @@ td {
 .e4 tr td {
   width: calc(100% / 4);
 } /* add more for this if more cols are possible */
-table tr ~ tr td {
-  border-top: 1px solid black;
-}
 #table-container {
   display: flex;
 }
@@ -36,4 +20,60 @@ table tr ~ tr td {
 }
 h1 {
   text-align: center;
+}
+body{
+    font-family: Helvetica;
+    -webkit-font-smoothing: antialiased;
+}
+h2{
+    text-align: center;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+    padding: 30px 0;
+}
+
+/* Table Styles */
+
+.table-container {
+    margin: 10px 70px 70px;
+    box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+}
+
+table {
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: normal;
+    border: none;
+    width: 100%;
+    max-width: 100%;
+    white-space: nowrap;
+    background-color: #ffffffaa;
+}
+
+table td, table th {
+    text-align: center;
+    padding: 10px 5px;
+}
+
+table td {
+    border-right: 1px solid #f8f8f81c;
+    font-size: 12px;
+  height: 30px;
+}
+
+table thead th {
+    color: #ffffff;
+    background: #4FC3A1;
+}
+
+
+table tr:nth-child(odd) {
+    color: #ffffff;
+    background: #324960aa;
+}
+
+table tr:nth-child(even) {
+    background: #f8f8f8aa;
 }

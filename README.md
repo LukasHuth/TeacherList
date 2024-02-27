@@ -68,6 +68,7 @@ git clone git@github.com:LukasHuth/TeacherList.git
 
 - [ ] support conversion from room movement (+A102(CL1) -> A102)
 - [ ] support hiding canclled lessons
+- [ ] change background image and fix unreadability of the head line
 
 ## Contributers
 - [Lukas Huth](https://github.com/LukasHuth)
