@@ -67,6 +67,25 @@ cd <path to your webserver>
 git clone git@github.com:LukasHuth/TeacherList.git
 ```
 
+# Input structure
+
+The input can be pointed to every file consisting of a list following this structure on each line
+where every element is seperated by a `|`:
+
+- Teacher name
+- Lesson Start (YYYY-MM-DD HH:MM:SS)
+- Lesson End (YYYY-MM-DD HH:MM:SS)
+- Room (if a movement occured it should be structured like this)
+  - from `A209` to `A201` should look like `+A201(A209)`
+- List of all teachers teaching this course (in the same room at the same time)
+- List of Classes attending the course (Comma seperation adviced)
+- Course Name (e.g. `E`)
+- Status:
+  - Unterricht: The teacher has a course currently
+  - cancelled: The course is cancled
+  - Gone: The last lesson of the teacher of today is over
+  - None: The teacher had no lesson today
+
 ## To-Do
 
 - [ ] support hiding canclled lessons
