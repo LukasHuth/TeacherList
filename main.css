@@ -34,9 +34,6 @@ table tr ~ tr td {
   flex: 1;
   margin-right: 10px;
 }
-#table0 {
-  left: 0;
-}
-#table1 {
-  right: 0;
+h1 {
+  text-align: center;
 }
