@@ -9,7 +9,8 @@ table ~ table {
   border-left: 3px solid black;
 }
 td {
-  width: 50%;
+  /* width: 50%; */
+  width: calc(100% / 3);
   padding: 10px 5px;
   /*border: 1px solid black;*/
   height: 30px;

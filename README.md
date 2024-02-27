@@ -26,6 +26,8 @@ or not. Default value is true, meaning they are hidden.
 an not teaching teacher can be away to still be displayed. Default is 1800000 (30min)
 - **sort_type**: Sets the sort order, how the teachers should be sorted, possible options are
 *ByRoom* and *ByName*. Default value is ByName.
+- **show_classes**: Decides whether the classes of a course should be shown in the table.
+Default value is true, meaning they are shown.
 
 ### Example usage
 
@@ -61,6 +63,7 @@ git clone git@github.com:LukasHuth/TeacherList.git
 
 - [ ] support conversion from room movement (+A102(CL1) -> A102)
 - [ ] support hiding canclled lessons
+- [ ] support to show start time
 
 ## Contributers
 - [Lukas Huth](https://github.com/LukasHuth)

@@ -12,6 +12,7 @@ const default_config = {
   update_time: 15*60*1000,
   offset_to_next_course: 30*60*1000,
   sort_type: sortTypes.ByName,
+  show_classes: true,
 };
 const config = {
   dev: findBoolGetParameter("dev") ?? default_config.dev,
@@ -23,6 +24,7 @@ const config = {
   update_time: findIntGetParameter("update_time") ?? default_config.update_time,
   offset_to_next_course: findIntGetParameter("offset_to_next_course") ?? default_config.offset_to_next_course,
   sort_type: findEnumGetParameter("sort_type") ?? default_config.sort_type,
+  show_classes: findIntGetParameter("show_classes") ?? default_config.show_classes,
 };
 var new_update = new Date();
 window.onload = () => {
@@ -81,6 +83,13 @@ function loadTable() {
         if(room == "-") roomColoumn.setAttribute("style", "background-color:#fbb;");
         row.appendChild(nameColumn);
         row.appendChild(roomColoumn);
+        if(config.show_classes) {
+          const klasseColoumn = document.createElement('td');
+          const klassen = splited_line[5];
+          const shorted_klassen = (klassen.length < 13) ? klassen : klassen.slice(0, 10) + "...";
+          klasseColoumn.textContent = shorted_klassen;
+          row.appendChild(klasseColoumn);
+        }
         tables[index].appendChild(row);
         i += 1;
       });
