@@ -57,5 +57,10 @@ cd <path to your webserver>
 git clone git@github.com:LukasHuth/TeacherList.git
 ```
 
+## To-Do
+
+- [ ] support conversion from room movement (+A102(CL1) -> A102)
+- [ ] support hiding canclled lessons
+
 ## Contributers
 - [Lukas Huth](https://github.com/LukasHuth)
