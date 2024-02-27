@@ -33,6 +33,9 @@ Default value is true, meaning the start time is shown.
 - **classes_trim_at**: Sets the offset where the classes will be considerred to be too long and
 will be trimmed down with `...`. Default value is 13, meaning `13G,13B,13E,13D` will be 
 `13G,13B,13...`
+- **convert_moved_room**: Determines whether the moved should be converted to just show the new
+room or if the whole string with the old room should be shown aswell.
+Default value is true, meaning only the new room is shown.
 
 ### Example usage
 
@@ -66,7 +69,6 @@ git clone git@github.com:LukasHuth/TeacherList.git
 
 ## To-Do
 
-- [ ] support conversion from room movement (+A102(CL1) -> A102)
 - [ ] support hiding canclled lessons
 - [ ] change background image and fix unreadability of the head line
 

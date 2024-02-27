@@ -15,6 +15,7 @@ const default_config = {
   show_classes: true,
   show_start_time: true,
   classes_trim_at: 13,
+  convert_moved_room: true,
 };
 const config = {
   dev: findBoolGetParameter("dev") ?? default_config.dev,
@@ -29,6 +30,7 @@ const config = {
   show_classes: findIntGetParameter("show_classes") ?? default_config.show_classes,
   show_start_time: findBoolGetParameter("show_start_time") ?? default_config.show_start_time,
   classes_trim_at: findIntGetParameter("classes_trim_at") ?? default_config.classes_trim_at,
+  convert_moved_room: findBoolGetParameter("convert_moved_room") ?? default_config.convert_moved_room,
 };
 var new_update = new Date();
 window.onload = () => {
@@ -79,7 +81,7 @@ function loadTable() {
         const teacher = splited_line[0];
         const start = splited_line[1];
         const end = splited_line[2];
-        const room = splited_line[3];
+        const room = getRoomName(splited_line[3]);
         const teacher_status = splited_line[7];
         const index = i%config.table_amount;
         if(shouldBeIgnored(room, teacher, teacher_status, start, end)) return;
@@ -111,6 +113,13 @@ function loadTable() {
       }
     });
 };
+function getRoomName(room_name) {
+  const room_name_str = room_name + "";
+  if(!config.convert_moved_room) return room_name;
+  if(!room_name_str.startsWith("+")) return room_name;
+  const pos_of_parenthesis = room_name_str.indexOf("(");
+  return room_name_str.slice(1, pos_of_parenthesis);
+}
 function getColumnAmount() {
   var amount = 2;
   if(config.show_start_time) amount++;
