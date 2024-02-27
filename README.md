@@ -30,6 +30,9 @@ an not teaching teacher can be away to still be displayed. Default is 1800000 (3
 Default value is true, meaning they are shown.
 - **show_start_time**: Decides whether the start of the next course should be shown.
 Default value is true, meaning the start time is shown.
+- **classes_trim_at**: Sets the offset where the classes will be considerred to be too long and
+will be trimmed down with `...`. Default value is 13, meaning `13G,13B,13E,13D` will be 
+`13G,13B,13...`
 
 ### Example usage
 

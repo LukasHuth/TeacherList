@@ -14,6 +14,7 @@ const default_config = {
   sort_type: sortTypes.ByName,
   show_classes: true,
   show_start_time: true,
+  classes_trim_at: 13,
 };
 const config = {
   dev: findBoolGetParameter("dev") ?? default_config.dev,
@@ -27,6 +28,7 @@ const config = {
   sort_type: findEnumGetParameter("sort_type") ?? default_config.sort_type,
   show_classes: findIntGetParameter("show_classes") ?? default_config.show_classes,
   show_start_time: findBoolGetParameter("show_start_time") ?? default_config.show_start_time,
+  classes_trim_at: findIntGetParameter("classes_trim_at") ?? default_config.classes_trim_at,
 };
 var new_update = new Date();
 window.onload = () => {
@@ -89,7 +91,7 @@ function loadTable() {
         if(config.show_classes) {
           const klasseColoumn = document.createElement('td');
           const klassen = splited_line[5];
-          const shorted_klassen = (klassen.length < 13) ? klassen : klassen.slice(0, 10) + "...";
+          const shorted_klassen = (klassen.length < config.classes_trim_at) ? klassen : klassen.slice(0, config.classes_trim_at-3) + "...";
           klasseColoumn.textContent = shorted_klassen;
           row.appendChild(klasseColoumn);
         }
