@@ -36,6 +36,8 @@ will be trimmed down with `...`. Default value is 13, meaning `13G,13B,13E,13D` 
 - **convert_moved_room**: Determines whether the moved should be converted to just show the new
 room or if the whole string with the old room should be shown aswell.
 Default value is true, meaning only the new room is shown.
+- **hide_cancelled**: Decides whether a cancelled course should be displayed or not.
+Default value is true, meaning cancelled courses are hidden.
 
 ### Example usage
 
@@ -88,7 +90,6 @@ where every element is seperated by a `|`:
 
 ## To-Do
 
-- [ ] support hiding canclled lessons
 - [ ] change background image and fix unreadability of the head line
 
 ## Contributers
