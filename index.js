@@ -13,6 +13,7 @@ const default_config = {
   offset_to_next_course: 30*60*1000,
   sort_type: sortTypes.ByName,
   show_classes: true,
+  show_start_time: true,
 };
 const config = {
   dev: findBoolGetParameter("dev") ?? default_config.dev,
@@ -25,6 +26,7 @@ const config = {
   offset_to_next_course: findIntGetParameter("offset_to_next_course") ?? default_config.offset_to_next_course,
   sort_type: findEnumGetParameter("sort_type") ?? default_config.sort_type,
   show_classes: findIntGetParameter("show_classes") ?? default_config.show_classes,
+  show_start_time: findBoolGetParameter("show_start_time") ?? default_config.show_start_time,
 };
 var new_update = new Date();
 window.onload = () => {
@@ -66,6 +68,7 @@ function loadTable() {
           sort_alg = sortByName;
           break;
       }
+      tableContainer.classList.add(`e${getColumnAmount()}`);
       t.split("\n").filter(l => l != "").map(line => line.split("|")).sort(sort_alg).forEach(splited_line => {
         if(splited_line == []) return;
         const row = document.createElement('tr');
@@ -90,6 +93,12 @@ function loadTable() {
           klasseColoumn.textContent = shorted_klassen;
           row.appendChild(klasseColoumn);
         }
+        if(config.show_start_time) {
+          const startTimeColumn = document.createElement('td');
+          const startTime = new Date(start);
+          startTimeColumn.textContent = `${startTime.getHours()}:${startTime.getMinutes()}`;
+          row.appendChild(startTimeColumn);
+        }
         tables[index].appendChild(row);
         i += 1;
       });
@@ -100,6 +109,12 @@ function loadTable() {
       }
     });
 };
+function getColumnAmount() {
+  var amount = 2;
+  if(config.show_start_time) amount++;
+  if(config.show_classes) amount++;
+  return amount;
+}
 function sortByName(e1, e2) {
   return e1[0].localeCompare(e2[0]);
 }

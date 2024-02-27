@@ -28,6 +28,8 @@ an not teaching teacher can be away to still be displayed. Default is 1800000 (3
 *ByRoom* and *ByName*. Default value is ByName.
 - **show_classes**: Decides whether the classes of a course should be shown in the table.
 Default value is true, meaning they are shown.
+- **show_start_time**: Decides whether the start of the next course should be shown.
+Default value is true, meaning the start time is shown.
 
 ### Example usage
 
@@ -63,7 +65,6 @@ git clone git@github.com:LukasHuth/TeacherList.git
 
 - [ ] support conversion from room movement (+A102(CL1) -> A102)
 - [ ] support hiding canclled lessons
-- [ ] support to show start time
 
 ## Contributers
 - [Lukas Huth](https://github.com/LukasHuth)
