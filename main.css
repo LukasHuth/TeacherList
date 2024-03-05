@@ -1,3 +1,7 @@
+:root {
+  --per-row: 8;
+  --margin-space-teacher: 5px;
+}
 body {
   background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/LudwigGeisslerSchule.jpg/1280px-LudwigGeisslerSchule.jpg");
   background-size: 100%;
@@ -83,6 +87,7 @@ table tr:nth-child(even) {
   flex-flow: row wrap;
 }
 .card-deck .card {
-  min-width: 220px;
-  margin: 10px 10px;
+  min-width: calc(( 100% - ( var(--margin-space-teacher) * var(--per-row) * 2)) / var(--per-row));
+  max-height: calc((100vh - 135px) / 6);
+  margin: var(--margin-space-teacher);
 }

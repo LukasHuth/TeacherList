@@ -15,6 +15,8 @@ const default_config = {
   classes_trim_at: 13,
   convert_moved_room: true,
   hide_cancelled: true,
+  columns: 8,
+  circle_time: 10_000,
 };
 const config = {
   hide_null_teachers: findBoolGetParameter("hide_null_teachers") ?? default_config.hide_null_teachers,
@@ -29,19 +31,35 @@ const config = {
   classes_trim_at: findIntGetParameter("classes_trim_at") ?? default_config.classes_trim_at,
   convert_moved_room: findBoolGetParameter("convert_moved_room") ?? default_config.convert_moved_room,
   hide_cancelled: findBoolGetParameter("hide_cancelled") ?? default_config.hide_cancelled,
+  columns: findIntGetParameter("columns") ?? default_config.columns,
+  circle_time: findIntGetParameter("circle_time") ?? default_config.circle_time,
 };
+var pages;
+var index = 0;
+var used_pages = 1;
 window.onload = () => {
+  pages = document.getElementById('container').children;
+  for(var i = 1; i < pages.length; i++) {
+    pages[i].style.display = 'none';
+  }
   loadTable();
+  const title = document.getElementById('title');
+  console.log(used_pages);
+  title.textContent = `Derzeitige Belegung (Seite ${index+1}/${used_pages})`;
+  setInterval(() => {
+    pages[index].style.display = 'none';
+    index++;
+    index = index % used_pages;
+    pages[index].style.display = '';
+    title.textContent = `Derzeitige Belegung (Seite ${index+1}/${used_pages})`;
+  }, config.circle_time);
   setInterval(() => loadTable(), config.update_time);
 }
 function loadTable() {
+  used_pages = 1;
   console.log(config);
-  const cardContainer = document.getElementById('card-container');
-  var card_amount = cardContainer.childNodes.length;
-  while(card_amount > 0) {
-    cardContainer.removeChild(cardContainer.childNodes[card_amount-1]);
-    card_amount--;
-  }
+  document.documentElement.style.setProperty('--per-row', config.columns);
+  console.log(pages);
   const url = config.dev ? 'lehrer.txt' : 'https://bigbrother2.lgsit.de/untisdata/lehrer.txt';
   fetch(url).then(response => {
     if(!response.ok) {
@@ -67,7 +85,6 @@ function loadTable() {
         .sort(sort_alg)
         .filter(arr => !shouldBeIgnoredFilter(arr))
         .forEach(splited_line => {
-          console.log(splited_line);
           if(splited_line == []) return;
           const teacher = splited_line[0];
           const start = splited_line[1];
@@ -85,7 +102,10 @@ function loadTable() {
             const startTime = new Date(start);
             card.setStartTime(`${startTime.getHours()}:${startTime.getMinutes()}`);
           }
-          cardContainer.appendChild(card.getNode());
+          var index = 0;
+          while(pages[index].children.length >= config.columns * 6) index++;
+          pages[index].appendChild(card.getNode());
+          if(index+1 > used_pages) used_pages = index+1;
         });
     });
 };
