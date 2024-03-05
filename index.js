@@ -13,7 +13,7 @@ const default_config = {
   offset_to_next_course: 30*60*1000,
   sort_type: sortTypes.ByName,
   show_classes: true,
-  show_start_time: true,
+  show_start_time: false,
   classes_trim_at: 13,
   convert_moved_room: true,
   hide_cancelled: true,
@@ -34,24 +34,17 @@ const config = {
   convert_moved_room: findBoolGetParameter("convert_moved_room") ?? default_config.convert_moved_room,
   hide_cancelled: findBoolGetParameter("hide_cancelled") ?? default_config.hide_cancelled,
 };
-var new_update = new Date();
 window.onload = () => {
   loadTable();
   setInterval(() => loadTable(), config.update_time);
 }
 function loadTable() {
   console.log(config);
-  const tables = [];
-  const tableContainer = document.getElementById('table-container');
-  var table_amount = tableContainer.childNodes.length;
-  while(table_amount > 0) {
-    tableContainer.removeChild(tableContainer.childNodes[table_amount-1]);
-    table_amount--;
-  }
-  for(var i = 0; i < config.table_amount; i++) {
-    const table = document.createElement('table');
-    tableContainer.append(table);
-    tables.push(table);
+  const cardContainer = document.getElementById('card-container');
+  var card_amount = cardContainer.childNodes.length;
+  while(card_amount > 0) {
+    cardContainer.removeChild(cardContainer.childNodes[card_amount-1]);
+    card_amount--;
   }
   const url = config.dev ? 'lehrer.txt' : 'https://bigbrother2.lgsit.de/untisdata/lehrer.txt';
   fetch(url).then(response => {
@@ -60,8 +53,6 @@ function loadTable() {
     }
     return response.text();
   }).then(data => {
-      var t = "" + data;
-      var i = 0;
       var sort_alg;
       switch(config.sort_type) {
         case sortTypes.ByName:
@@ -74,59 +65,73 @@ function loadTable() {
           sort_alg = sortByName;
           break;
       }
-      tableContainer.classList.add(`e${getColumnAmount()}`);
-      t.split("\n").filter(l => l != "").map(line => line.split("|")).sort(sort_alg).forEach(splited_line => {
+      data.split("\n")
+        .filter(l => l != "")
+        .map(line => line.split("|"))
+        .sort(sort_alg)
+        .filter(arr => !shouldBeIgnoredFilter(arr))
+        .forEach(splited_line => {
+          console.log(splited_line);
         if(splited_line == []) return;
-        const row = document.createElement('tr');
-        const nameColumn = document.createElement('td');
-        const roomColoumn = document.createElement('td');
         const teacher = splited_line[0];
         const start = splited_line[1];
         const end = splited_line[2];
         const room = getRoomName(splited_line[3]);
         const teacher_status = splited_line[7];
-        const index = i%config.table_amount;
         if(shouldBeIgnored(room, teacher, teacher_status, start, end)) return;
-        nameColumn.textContent = teacher;
-        roomColoumn.textContent = room;
+        const name = teacher;
+        var class_name = '';
+        var start_time = '';
         if(room == "-") roomColoumn.setAttribute("style", "background-color:#fbb;");
-        row.appendChild(nameColumn);
-        row.appendChild(roomColoumn);
         if(config.show_classes) {
-          const klasseColoumn = document.createElement('td');
           const klassen = splited_line[5];
           const shorted_klassen = (klassen.length < config.classes_trim_at) ? klassen : klassen.slice(0, config.classes_trim_at-3) + "...";
-          klasseColoumn.textContent = shorted_klassen;
-          row.appendChild(klasseColoumn);
+          class_name = shorted_klassen;
         }
         if(config.show_start_time) {
-          const startTimeColumn = document.createElement('td');
           const startTime = new Date(start);
-          startTimeColumn.textContent = `${startTime.getHours()}:${startTime.getMinutes()}`;
-          row.appendChild(startTimeColumn);
+          start_time = `${startTime.getHours()}:${startTime.getMinutes()}`;
         }
-        tables[index].appendChild(row);
-        i += 1;
+        cardContainer.appendChild(createCard(name, room, class_name, start_time));
       });
-      while(i%config.table_amount != 0) {
-        // buffer element
-        tables[i%config.table_amount].appendChild(document.createElement('tr'));
-        i += 1;
-      }
     });
 };
+function shouldBeIgnoredFilter(arr) {
+  if(arr == []) return true;
+  return shouldBeIgnored(getRoomName(arr[3]), arr[0]+"", arr[7], arr[1], arr[2]);
+}
+function createCard(name, room, class_name, start_time) {
+  const card = document.createElement('div');
+  const cardheader = document.createElement('div');
+  const header = document.createElement('h4');
+  const cardbody = document.createElement('div');
+  const ul = document.createElement('div');
+  const e1 = document.createElement('li');
+  const e2 = document.createElement('li');
+  const e3 = document.createElement('li');
+  card.classList.add('card');
+  cardheader.classList.add('card-header');
+  header.textContent = name;
+  cardbody.classList.add('card-body');
+  ul.classList.add('list-unstyled');
+  e1.textContent = room;
+  e2.textContent = class_name;
+  e3.textContent = start_time;
+  ul.appendChild(e1);
+  if(class_name !== '') ul.appendChild(e2);
+  if(start_time !== '') ul.appendChild(e3);
+  cardheader.appendChild(header);
+  cardbody.appendChild(ul);
+  card.appendChild(cardheader);
+  card.appendChild(cardbody);
+  return card;
+}
 function getRoomName(room_name) {
   const room_name_str = room_name + "";
   if(!config.convert_moved_room) return room_name;
   if(!room_name_str.startsWith("+")) return room_name;
   const pos_of_parenthesis = room_name_str.indexOf("(");
   return room_name_str.slice(1, pos_of_parenthesis);
-}
-function getColumnAmount() {
-  var amount = 2;
-  if(config.show_start_time) amount++;
-  if(config.show_classes) amount++;
-  return amount;
 }
 function sortByName(e1, e2) {
   return e1[0].localeCompare(e2[0]);
@@ -136,7 +141,7 @@ function sortByRoom(e1, e2) {
   return e1[3].localeCompare(e2[3]);
 }
 function shouldBeIgnored(room, teacher, teacher_status, start, end) {
-  console.log("start test");
+  if(teacher == "") return true;
   if(teacher.toLowerCase().startsWith('zn')) return true; // intern structs
   if(room == "" && config.hide_null_teachers) return true;
   if(teacher_status == "cancelled" && config.hide_cancelled) return true;
