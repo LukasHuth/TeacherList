@@ -3,8 +3,6 @@ const sortTypes = {
   ByRoom: 'ByRoom',
 };
 const default_config = {
-  dev: true,
-  table_amount: 2,
   hide_null_teachers: true,
   hide_gone: true,
   hide_no_data: true,
@@ -19,8 +17,6 @@ const default_config = {
   hide_cancelled: true,
 };
 const config = {
-  dev: findBoolGetParameter("dev") ?? default_config.dev,
-  table_amount: findIntGetParameter("table_amount") ?? default_config.table_amount,
   hide_null_teachers: findBoolGetParameter("hide_null_teachers") ?? default_config.hide_null_teachers,
   hide_gone: findBoolGetParameter("hide_gone") ?? default_config.hide_gone,
   hide_no_data: findBoolGetParameter("hide_no_data") ?? default_config.hide_no_data,
@@ -72,59 +68,74 @@ function loadTable() {
         .filter(arr => !shouldBeIgnoredFilter(arr))
         .forEach(splited_line => {
           console.log(splited_line);
-        if(splited_line == []) return;
-        const teacher = splited_line[0];
-        const start = splited_line[1];
-        const end = splited_line[2];
-        const room = getRoomName(splited_line[3]);
-        const teacher_status = splited_line[7];
-        if(shouldBeIgnored(room, teacher, teacher_status, start, end)) return;
-        const name = teacher;
-        var class_name = '';
-        var start_time = '';
-        if(room == "-") roomColoumn.setAttribute("style", "background-color:#fbb;");
-        if(config.show_classes) {
-          const klassen = splited_line[5];
-          const shorted_klassen = (klassen.length < config.classes_trim_at) ? klassen : klassen.slice(0, config.classes_trim_at-3) + "...";
-          class_name = shorted_klassen;
-        }
-        if(config.show_start_time) {
-          const startTime = new Date(start);
-          start_time = `${startTime.getHours()}:${startTime.getMinutes()}`;
-        }
-        cardContainer.appendChild(createCard(name, room, class_name, start_time));
-      });
+          if(splited_line == []) return;
+          const teacher = splited_line[0];
+          const start = splited_line[1];
+          const end = splited_line[2];
+          const room = getRoomName(splited_line[3]);
+          const teacher_status = splited_line[7];
+          if(shouldBeIgnored(room, teacher, teacher_status, start, end)) return;
+          const card = new Card(teacher, room);
+          if(config.show_classes) {
+            const klassen = splited_line[5];
+            const shorted_klassen = (klassen.length < config.classes_trim_at) ? klassen : klassen.slice(0, config.classes_trim_at-3) + "...";
+            card.setClasses(shorted_klassen);
+          }
+          if(config.show_start_time) {
+            const startTime = new Date(start);
+            card.setStartTime(`${startTime.getHours()}:${startTime.getMinutes()}`);
+          }
+          cardContainer.appendChild(card.getNode());
+        });
     });
 };
 function shouldBeIgnoredFilter(arr) {
   if(arr == []) return true;
   return shouldBeIgnored(getRoomName(arr[3]), arr[0]+"", arr[7], arr[1], arr[2]);
 }
-function createCard(name, room, class_name, start_time) {
-  const card = document.createElement('div');
-  const cardheader = document.createElement('div');
-  const header = document.createElement('h4');
-  const cardbody = document.createElement('div');
-  const ul = document.createElement('div');
-  const e1 = document.createElement('li');
-  const e2 = document.createElement('li');
-  const e3 = document.createElement('li');
-  card.classList.add('card');
-  cardheader.classList.add('card-header');
-  header.textContent = name;
-  cardbody.classList.add('card-body');
-  ul.classList.add('list-unstyled');
-  e1.textContent = room;
-  e2.textContent = class_name;
-  e3.textContent = start_time;
-  ul.appendChild(e1);
-  if(class_name !== '') ul.appendChild(e2);
-  if(start_time !== '') ul.appendChild(e3);
-  cardheader.appendChild(header);
-  cardbody.appendChild(ul);
-  card.appendChild(cardheader);
-  card.appendChild(cardbody);
-  return card;
+class Card {
+  #card = document.createElement('div');
+  #cardheader = document.createElement('div');
+  #cardbody = document.createElement('div');
+  #header = document.createElement('h4');
+  #bodylist = document.createElement('ul');
+  #element0 = document.createElement('li');
+  #element1 = document.createElement('li');
+  #element2 = document.createElement('li');
+  constructor(teacher, room) {
+    this.#setTeacher(teacher);
+    this.#setRoom(room);
+    this.#bodylist.appendChild(this.#element0);
+    this.#cardbody.appendChild(this.#bodylist);
+    this.#cardheader.appendChild(this.#header);
+    this.#card.appendChild(this.#cardheader);
+    this.#card.appendChild(this.#cardbody);
+    this.#card.classList.add('card');
+    this.#cardheader.classList.add('card-header');
+    this.#cardbody.classList.add('card-body');
+    this.#bodylist.classList.add('list-unstyled');
+  }
+  #setTeacher(teacher) {
+    this.#header.textContent = teacher;
+  }
+  #setRoom(room) {
+    this.#element0.textContent = room;
+  }
+  setClasses(class_name) {
+    this.#element1.textContent = class_name;
+    if(!this.#bodylist.contains(this.#element1)) {
+      this.#bodylist.appendChild(this.#element1);
+    }
+  }
+  setStartTime(time) {
+    this.#element2.textContent = time;
+    if(!this.#bodylist.contains(this.#element2)) {
+      this.#bodylist.appendChild(this.#element2);
+    }
+  }
+  getNode() {
+    return this.#card;
+  }
 }
 function getRoomName(room_name) {
   const room_name_str = room_name + "";

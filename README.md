@@ -10,8 +10,6 @@ This website provides semi real-time information about the current location of t
 
 You can customize the display of teacher information using the followingparameters in the URL:
 
-- **table_amount**: Specifies the amount of tables (rows) used for displaying teacher information next
-to each other. Default value is 2.
 - **hide_null_teachers**: Controls whether teachers who are registered at the school but do not
 have courses scheduled for the current year are displayed. Default value is true, meaning they
 are hidden.
@@ -44,10 +42,10 @@ Default value is true, meaning cancelled courses are hidden.
 To customize the display, simple append the desired parameters to the URL. For example:
 
 ```
-https://example.com/teacher-availability?table_amount=3&hide_null_teachers=false
+https://example.com/teacher-availability?hide_null_teachers=false
 ```
 
-This URL will display teacher information in 3 rows, including teachers who do not have courses schedules for the current year.
+This URL will display teacher information, including teachers who do not have courses schedules for the current year.
 
 ## Development
 
@@ -91,6 +89,7 @@ where every element is seperated by a `|`:
 ## To-Do
 
 - [ ] change background image and fix unreadability of the head line
+- [ ] Add pages that cycle
 
 ## Contributers
 - [Lukas Huth](https://github.com/LukasHuth)
