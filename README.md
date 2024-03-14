@@ -88,8 +88,7 @@ where every element is seperated by a `|`:
 
 ## To-Do
 
-- [ ] change background image and fix unreadability of the head line
-- [ ] Add pages that cycle
+- [ ] change background image
 
 ## Contributers
 - [Lukas Huth](https://github.com/LukasHuth)
