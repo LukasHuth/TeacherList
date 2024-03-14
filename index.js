@@ -45,7 +45,7 @@ window.onload = () => {
   loadTable();
   const title = document.getElementById('title');
   console.log(used_pages);
-  title.textContent = `Derzeitige Belegung (Seite ${index+1}/${used_pages})`;
+  setTimeout(() => title.textContent = `Derzeitige Belegung (Seite ${index+1}/${used_pages})`, 50);
   setInterval(() => {
     pages[index].style.display = 'none';
     index++;
